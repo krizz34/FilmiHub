@@ -1,23 +1,21 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Navbar from './components/Navbar/Navbar';
+import checkAuth from "./components/Authenticate/CheckAuth";
+import { Link } from 'react-router-dom';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='customBg'>
+      <Navbar />
+      <div className="customBg2 d-flex align-items-center justify-content-center text-center">
+        <div>
+          <h1 className="display-3 mb-4" style={{ color: '#fff', fontWeight: 'bold'}}>Welcome to Pharma<span style={{ color: '#ffda9c'}}>Lore</span></h1>
+          <p className="lead mb-4" style={{ color: '#fff' }}>Your trusted source for all medical needs</p>
+          <Link to="/readAPI" className="btn btn-lg customBtnClr">Explore Medicines</Link>
+        </div>
+      </div>
     </div>
   );
 }

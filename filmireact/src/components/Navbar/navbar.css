@@ -1,0 +1,21 @@
+.customNavItem:hover {
+    transform: translateY(-1px);
+}
+
+.customNavBrand:hover {
+    transform: scale(1.05);
+}
+
+.customNavbar {
+    /* font-size: 24px; */
+    max-width: 685px;
+    margin: 0 auto;
+    border-radius: 30px;
+    position: sticky;
+    top: 0;
+    z-index: 9px;
+}
+
+.navbar .dropdown-menu {
+    z-index: inherit; /* You can adjust this value based on your needs */
+  }
