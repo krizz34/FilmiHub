@@ -1,10 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
 
-
-
-
-
 class movie(models.Model):
     movieName = models.CharField(max_length=100)
     movieDesc = models.TextField(max_length=1200)

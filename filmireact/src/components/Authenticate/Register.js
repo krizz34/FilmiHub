@@ -4,20 +4,18 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 
 function Register() {
-    var [name, setName] = useState('');
-    var [email, setEmail] = useState('');
-    var [password, setPassword] = useState('');
-    var [password_confirmation, setPassword_confirmation] = useState('');
+    var [username, setUsername] = useState('');
+    var [password1, setPassword1] = useState('');
+    var [password2, setPassword2] = useState('');
     var [errorMessage, setErrorMessage] = useState('');
     var navigate = useNavigate();
     function registerUser(){
         var user = {
-            name: name,
-            email: email,
-            password: password,
-            password_confirmation: password_confirmation
+            username: username,
+            password1: password1,
+            password2: password2
         }
-        axios.post('https://medicalstore.mashupstack.com/api/register',user).then(response=>{
+        axios.post('http://127.0.0.1:8000/adminHub/APIsignup/',user).then(response=>{
             setErrorMessage('');
             navigate('/login');
         }).catch(error=>{
@@ -40,32 +38,24 @@ function Register() {
                         <label>Name:</label>
                         <input type="text"
                         className="form-control"
-                        value={name}
-                        onInput={(event)=>setName(event.target.value)}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Email:</label>
-                        <input type="text"
-                        className="form-control"
-                        value={email}
-                        onInput={(event)=>setEmail(event.target.value)}
+                        value={username}
+                        onInput={(event)=>setUsername(event.target.value)}
                         />
                     </div>
                     <div className="form-group">
                         <label>Password:</label>
                         <input type="password"
                         className="form-control"
-                        value={password}
-                        onInput={(event)=>setPassword(event.target.value)}
+                        value={password1}
+                        onInput={(event)=>setPassword1(event.target.value)}
                         />
                     </div>
                     <div className="form-group">
                         <label>Confirm Password:</label>
                         <input type="password"
                         className="form-control"
-                        value={password_confirmation}
-                        onInput={(event)=>setPassword_confirmation(event.target.value)}
+                        value={password2}
+                        onInput={(event)=>setPassword2(event.target.value)}
                         />
                     </div>
                     <div className="form-group">

@@ -129,7 +129,7 @@ function ListPosts() {
 
   function fetchPosts() {
     if (user && user.token) {
-      axios.get(`https://medicalstore.mashupstack.com/api/medicine/search?keyword=${searchTerm}`, {
+      axios.get(`http://127.0.0.1:8000/adminHub/APIsearch/${searchTerm}/`, {
         headers: { 'Authorization': "bearer " + user.token }
       })
       .then(response => {
@@ -145,7 +145,7 @@ function ListPosts() {
 
   useEffect(() => {
     if (user && user.token) {
-      axios.get('https://medicalstore.mashupstack.com/api/medicine', {
+      axios.get('http://127.0.0.1:8000/adminHub/APIread/', {
         headers: { 'Authorization': "bearer " + user.token }
       })
       .then(response => {

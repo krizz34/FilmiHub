@@ -12,6 +12,9 @@ from .forms import movieForm
 from .models import movie
 from .serializers import movieSerializer
 
+from datetime import datetime
+
+
 
 
 @api_view(['POST'])
@@ -53,26 +56,27 @@ def apiLogout(request):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-@permission_classes((AllowAny,))
+@permission_classes([IsAuthenticated])
 def apiCreate(request):
     createData = movieForm(request.data)
     if createData.is_valid():
+        # Convert the date format before saving to the database
+        createData.cleaned_data['movieFromDate'] = createData.cleaned_data['movieFromDate'].strftime('%Y-%m-%d')
+        createData.cleaned_data['movieEndDate'] = createData.cleaned_data['movieEndDate'].strftime('%Y-%m-%d')
         product = createData.save()
-        return Response({'id':product.id}, status = status.HTTP_201_CREATED)
-    return Response(createData.errors, status= status.HTTP_400_BAD_REQUEST)
+        return Response({'id': product.id}, status=status.HTTP_201_CREATED)
+    
+    return Response(createData.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-@permission_classes((AllowAny,))
+@permission_classes([IsAuthenticated])
 def apiRead(request):
     products = movie.objects.all()
     serializer = movieSerializer(products, many=True)
     return Response(serializer.data)
 
 @api_view(['PUT'])
-# @permission_classes([IsAuthenticated])
-@permission_classes((AllowAny,))
+@permission_classes([IsAuthenticated])
 def apiUpdate(request, pk):
     product_instance = get_object_or_404(movie, pk=pk)
     form = movieForm(request.data, instance=product_instance)
@@ -84,8 +88,7 @@ def apiUpdate(request, pk):
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticated])
-@permission_classes((AllowAny,))
+@permission_classes([IsAuthenticated])
 def apiDelete(request, pk):
     try:
         product_instance = movie.objects.get(pk=pk)
@@ -96,8 +99,7 @@ def apiDelete(request, pk):
     return Response("deleted successfully")
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-@permission_classes((AllowAny,))
+@permission_classes([IsAuthenticated])
 def apiSearch(request, movieName):
     movies = movie.objects.filter(movieName__icontains=movieName)
     

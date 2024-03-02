@@ -9,20 +9,20 @@ import checkGuest from "./CheckGuest";
 
 
 function Login() {
-    var [email, setEmail] = useState('');
+    var [username, setUsername] = useState('');
     var [password, setPassword] = useState('');
     var [errorMessage, setErrorMessage] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
     function attemptLogin() {
-        axios.post('https://medicalstore.mashupstack.com/api/login',{
-            email:email,
+        axios.post('http://127.0.0.1:8000/adminHub/APIlogin/',{
+            username:username,
             password:password
         }).then(response=>{
             setErrorMessage('')
             var user = {
-                email:email,
+                username:username,
                 token:response.data.token
             }
             dispatch(setUser(user));
@@ -43,17 +43,17 @@ function Login() {
     
     return (<div className="customBg">
         <Navbar/>
-        <div className="container w-50 w-sm-100 bg-white rounded mt-5 p-3">
+        <div className="container w-50 bg-white rounded mt-5 p-3">
             <div className="row">
                 <div className="col-8 offset-2">
                     <h1 style={{ fontWeight: 'bold', color: '#531251' }}>Login</h1>
                     {errorMessage?<div className="alert alert-danger">{errorMessage}</div>:''}
                     <div className="form-group">
-                        <label>Email:</label>
+                        <label>username:</label>
                         <input type="text"
                         className="form-control"
-                        value={email}
-                        onInput={(event)=>setEmail(event.target.value)}
+                        value={username}
+                        onInput={(event)=>setUsername(event.target.value)}
                         />
                     </div>
                     <div className="form-group">
