@@ -130,7 +130,7 @@ function ListPosts() {
   function fetchPosts() {
     if (user && user.token) {
       axios.get(`http://127.0.0.1:8000/adminHub/APIsearch/${searchTerm}/`, {
-        headers: { 'Authorization': "bearer " + user.token }
+        headers: { 'Authorization': "token " + user.token }
       })
       .then(response => {
         setFilteredPosts(response.data);
@@ -146,7 +146,7 @@ function ListPosts() {
   useEffect(() => {
     if (user && user.token) {
       axios.get('http://127.0.0.1:8000/adminHub/APIread/', {
-        headers: { 'Authorization': "bearer " + user.token }
+        headers: { 'Authorization': "token " + user.token }
       })
       .then(response => {
         setPosts(response.data);
@@ -167,19 +167,19 @@ function ListPosts() {
       <div className="container w-50 bg-white rounded mt-5 p-3">
         <div className="row">
           <div className="col-12">
-            <h1 className="text-center my-4" style={{ fontWeight: 'bold', color: '#531251' }}>Medicine List</h1>
+            <h1 className="text-center my-4" style={{ fontWeight: 'bold', color: '#eecd1d' }}>Movie List</h1>
           </div>
         </div>
         <div className="row">
           <div className="col-8 offset-2">
             <div style={{ display: 'flex',alignItems: 'flex-start' }}>
-                <Link to="/createAPI" className="btn customBtnClrAlt mb-2" style={{ width: '30%', height: '42px', marginRight: '10px' }}>Add Medicine</Link>
+                <Link to="/createAPI" className="btn customBtnClrAlt mb-2" style={{ width: '30%', height: '42px', marginRight: '10px' }}>New Movie</Link>
 
                 <form className="search-container" style={{ width: '70%' }}>
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                        <input type="text" placeholder="Search Medicine" className="search-input" value={searchTerm} onChange={handleSearchInputChange} style={{ height: '100%', padding: '10px', boxSizing: 'border-box' }} />
+                        <input type="text" placeholder="Search a movie..." className="search-input" value={searchTerm} onChange={handleSearchInputChange} style={{ height: '100%', padding: '10px', boxSizing: 'border-box' }} />
                         <button className="btn btn-small customBtnClrAlt" type="button" onClick={handleSearch} style={{ position: 'absolute', right: 0, top: 0, height: '100%', borderRadius: '0 5px 5px 0', boxSizing: 'border-box' }}>
-                            <FontAwesomeIcon icon={faSearch} style={{ color: 'white' }} />
+                            <FontAwesomeIcon icon={faSearch} style={{ color: '#000000' }} />
                         </button>
                     </div>
                 </form>
@@ -203,4 +203,4 @@ function ListPosts() {
   );
 }
 
-export default ListPosts;
+export default checkAuth(ListPosts);

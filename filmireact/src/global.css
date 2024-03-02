@@ -1,0 +1,30 @@
+/* global.css */
+
+/* For Chrome, Safari, and newer Edge browsers */
+/* Track */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    width: 8px; /* Set width to 0 to hide the scrollbar handle */
+    background-color: #000000;
+    border-radius: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background-color: #eecd1d; /* Color of the scrollbar track */
+  }
+  
+  /* Corner */
+  ::-webkit-scrollbar-corner {
+    background-color: #eecd1d; /* Color of the scrollbar corner */
+  }
+  
+  /* Resizer */
+  ::-webkit-resizer {
+    background-color: #fff; /* Color of the scrollbar resizer */
+  }
+  

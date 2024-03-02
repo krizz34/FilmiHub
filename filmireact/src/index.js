@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import store from './components/Redux/Store';
 
 import AutoLogin from './components/Authenticate/AutoLogin';
-
+import './global.css';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

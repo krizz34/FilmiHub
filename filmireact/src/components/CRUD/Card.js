@@ -52,8 +52,8 @@ function PostListItem(props) {
     const handleClose = () => setShowModal(false);
 
     function deletePost() {
-        axios.delete(`https://medicalstore.mashupstack.com/api/medicine/${props.post.id}`, {
-            headers: { 'Authorization': `bearer ${user.token}` }
+        axios.delete(`http://127.0.0.1:8000/adminHub/APIdelete/${props.post.id}/`, {
+            headers: { 'Authorization': "token " + user.token }
         }).then(response => {
             alert(response.data.message)
             props.refresh();
@@ -61,17 +61,18 @@ function PostListItem(props) {
         })
     }
 
+
     return (
         <div className="card">
             <div className="card-body">
-                {props.post.name}
-                <button className="btn btn-danger btn-sm float-right m-1 border-0" style={{ backgroundColor: '#d71129' }} onClick={handleShow}>
+                {props.post.movieName}
+                <button className="btn btn-danger btn-sm float-right m-1 border-0" style={{ backgroundColor: '#000000', color: '#d71129' }} onClick={handleShow}>
                     <FontAwesomeIcon icon={faTrashAlt} />
                 </button>
-                <Link to={`/updateAPI/${props.post.id}/edit`} className="btn btn-primary btn-sm float-right m-1 border-0" style={{ backgroundColor: '#be9865' }}>
+                <Link to={`/updateAPI/${props.post.id}/edit`} className="btn btn-primary btn-sm float-right m-1 border-0" style={{ backgroundColor: '#000000', color: '#808080' }}>
                     <FontAwesomeIcon icon={faPencilAlt} />
                 </Link>
-                <Link to={`/viewAPI/${props.post.id}`} className="btn btn-info btn-sm float-right m-1 border-0" style={{ backgroundColor: '#531251' }}>
+                <Link to={`/viewAPI/${props.post.id}`} className="btn btn-info btn-sm float-right m-1 border-0" style={{ backgroundColor: '#000000', color: '#eecd1d'}}>
                     <FontAwesomeIcon icon={faEye} />
                 </Link>
             </div>

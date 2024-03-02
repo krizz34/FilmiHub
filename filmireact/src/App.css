@@ -1,7 +1,8 @@
 .customBg {
-  background-color: #531251;
+  background-color: #eecd1d;
   padding-top: 15px;
-  height: 100vh;
+  padding-bottom: 15px;
+  min-height: 100vh;
 }
 
 .customBg2 {
@@ -38,14 +39,14 @@
 }
 
 .customBtnClr {
-  background-color: white !important;
-  color: #531251 !important;
+  background-color: #000000 !important;
+  color: #eecd1d !important;
   font-weight: bold !important;
 }
 
 .customBtnClrAlt {
-  background-color: #531251 !important;
-  color: white !important;
+  background-color: #eecd1d !important;
+  color: black !important;
   font-weight: bold !important;
   cursor: pointer !important;
 }
@@ -69,79 +70,3 @@
   top: 0 !important;
   height: 100% !important;
 }
-
-/* Style for Pikaday container */
-.pika-single {
-  z-index: 9999;
-  font-family: 'Arial', sans-serif;
-  border-radius: 8px; /* Rounded border */
-  background-color: #fff; /* White background */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow */
-}
-
-/* Style for Pikaday header */
-.pika-title {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Style for Pikaday selected day */
-.is-selected {
-  background-color: #3498db;
-  color: #fff;
-}
-
-/* Style for Pikaday day cells */
-.is-today {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Style for Pikaday footer */
-.pika-button {
-  background-color: #ffffff;
-  color: #000000;
-  border: none;
-}
-
-.pika-select-year,
-.pika-select-month {
-  background-color: #ddd; /* Background color */
-  color: #333; /* Font color */
-  border: 1px solid #ccc; /* Border color */
-  border-radius: 5px; /* Border radius */
-  padding: 5px; /* Padding */
-  margin: 5px;
-}
-
-.pika-prev, .pika-next {
-  color: #000000;
-  background-color: #fff;
-  border-radius: 2px;
-  border: #333 1px;
-  margin: 3px;
-}
-
-/* pikaday-custom.css */
-
-/* Set the background color */
-.pika-single {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Set the font color */
-.is-today, .is-selected, .has-event {
-  color: #333;
-}
-
-/* Set the background color of the selected date */
-.is-selected {
-  background: #ddd;
-}
-
-/* Set the hover color of the date */
-.pika-button:hover {
-  background: #ddd;
-}
-

@@ -28,11 +28,10 @@ function Register() {
     }
     return(
     <div className="customBg">
-        <Navbar/>
         <div className="container w-50 bg-white rounded mt-5 p-3">
             <div className="row">
                 <div className="col-8 offset-2">
-                    <h1 style={{ fontWeight: 'bold', color: '#531251' }}>Sign Up</h1>
+                    <h1 style={{ fontWeight: 'bold', color: '#eecd1d' }}>Sign Up</h1>
                     {errorMessage?<div className="alert alert-danger">{errorMessage}</div>:''}
                     <div className="form-group">
                         <label>Name:</label>
@@ -64,7 +63,7 @@ function Register() {
                 </div>
             </div>
         </div>
-        <p className="text-center text-light">Aready a user? <a href="/login" className="text-decoration-none" style={{ fontWeight: 'bold', color: '#ffda9c' }}>Login</a></p>
+        <p className="text-center text-light">Aready a user? <a href="/login" className="text-decoration-none" style={{ fontWeight: 'bold', color: '#000000' }}>Login</a></p>
     </div>
     )
 }

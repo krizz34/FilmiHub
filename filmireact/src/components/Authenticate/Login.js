@@ -46,7 +46,7 @@ function Login() {
         <div className="container w-50 bg-white rounded mt-5 p-3">
             <div className="row">
                 <div className="col-8 offset-2">
-                    <h1 style={{ fontWeight: 'bold', color: '#531251' }}>Login</h1>
+                    <h1 style={{ fontWeight: 'bold', color: '#eecd1d' }}>Login</h1>
                     {errorMessage?<div className="alert alert-danger">{errorMessage}</div>:''}
                     <div className="form-group">
                         <label>username:</label>
@@ -70,7 +70,7 @@ function Login() {
                 </div>
             </div>
         </div>
-        <p className="text-center text-light">New user? <a href="/register" className="text-decoration-none" style={{ fontWeight: 'bold', color: '#ffda9c' }}>Sign Up</a> here.</p>
+        <p className="text-center text-light">New user? <a href="/register" className="text-decoration-none" style={{ fontWeight: 'bold', color: '#000000' }}>Sign Up</a> here.</p>
 
     </div>
     )

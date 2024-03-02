@@ -75,17 +75,35 @@ def apiRead(request):
     serializer = movieSerializer(products, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes((AllowAny,))
+def apiReadSpecial(request, pk):
+    try:
+        product = movie.objects.get(pk=pk)
+        serializer = movieSerializer(product)
+        return Response(serializer.data)
+    except movie.DoesNotExist:
+        return Response({'error': 'Medicine not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def apiUpdate(request, pk):
     product_instance = get_object_or_404(movie, pk=pk)
+
+    # Convert the date format before saving to the database
+    request.data['movieFromDate'] = datetime.strptime(request.data['movieFromDate'], '%Y-%m-%d').date()
+    request.data['movieEndDate'] = datetime.strptime(request.data['movieEndDate'], '%Y-%m-%d').date()
+
     form = movieForm(request.data, instance=product_instance)
+
     if form.is_valid():
         form.save()
         serializer = movieSerializer(product_instance)
         return Response(serializer.data)
     else:
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])

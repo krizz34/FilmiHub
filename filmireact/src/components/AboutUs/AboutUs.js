@@ -1,47 +1,47 @@
 import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import '../../App.css';
-import Navbar from '../Navbar/Navbar'
+import Navbar from '../Navbar/Navbar';
 import checkAuth from "../Authenticate/CheckAuth";
+import logo from '../Navbar/logo.png';
 
 
+function AboutUs() {
+    const navigator = useNavigate();
 
-function Aboutus() {
-
-    const navigator = useNavigate()
-    function doNavigate(){
-        navigator('/')
+    function doNavigate() {
+        navigator('/');
     }
 
     return (
-      <div className="customBg">
-      <Navbar />
-      <div className='container w-50 bg-white rounded mt-5 p-3'>
-          {/* <p className='customText'>Hola Globo</p> */}
-          <div className='row'>
-            <div className='col'>
-              <div className='container bg-white rounded'>
-              <h1 style={{ fontWeight: 'bold', color: '#531251' }}>About Us</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-           labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-           laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-           esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,sunt in culpa qui
-           officia deserunt mollit anim id est laborum.
-        </p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut 
-           labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-           laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-           esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,sunt in culpa qui
-           officia deserunt mollit anim id est laborum.
-        </p>
-        <button className='btn customBtnClrAlt' onClick={doNavigate}>Home Page</button> {/* done with programatic navigator (useNavigate) */}
-
-              </div>
+        <div className="customBg">
+            <Navbar />
+            <div className='container w-75 bg-white rounded mt-5 p-4'>
+                <div className='row'>
+                    <div className='col'>
+                        <div className='container bg-white rounded'>
+                            <h1 style={{ fontWeight: 'bold', color: '#eecd1d' }}>Welcome to <img src={logo} alt="logo of FilmiHub" className="img-fluid" style={{ maxHeight: '72px', paddingBottom: '23px', marginLeft: '-18px'}} /></h1>
+                            <p>
+                                At FilmiHub, we are passionate about bringing the magic of cinema to your fingertips.
+                                Immerse yourself in a world of entertainment, where every click opens the door to a
+                                cinematic adventure.
+                            </p>
+                            <p>
+                                Our mission is to make your movie-watching experience seamless and enjoyable.
+                                Whether you are a movie enthusiast or a casual viewer, FilmiHub is your go-to
+                                destination for all things cinema.
+                            </p>
+                            <p>
+                                Explore the latest releases, manage your screening schedules, and delight your
+                                audience with an exceptional movie-going experience.
+                            </p>
+                            <button className='btn customBtnClrAlt' onClick={doNavigate}>Home Page</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-      </div>
-    </div>
-);
+        </div>
+    );
 }
 
-export default checkAuth(Aboutus);
+export default checkAuth(AboutUs);

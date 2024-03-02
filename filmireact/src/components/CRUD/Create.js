@@ -41,7 +41,7 @@ function CreatePost() {
             <div className="container w-50 bg-white rounded mt-5 p-3">
                 <div className="row">
                     <div className="col-8 offset-2">
-                        <h1 className="text-center font-weight-bold text-primary">New Movie</h1>
+                        <h1 className="text-center" style={{ fontWeight: 'bold', color: '#eecd1d' }} >New Movie</h1>
                         <div className="form-group">
                             <label>Movie Name:</label>
                             <input type="text" className="form-control" value={movieName} onChange={(event) => { setMovieName(event.target.value) }} />
@@ -77,7 +77,7 @@ function CreatePost() {
                             <input type="date" className="form-control" value={movieEndDate} onChange={(event) => { setMovieEndDate(event.target.value) }} pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" title="Enter a date in the format YYYY-MM-DD"  />
                         </div>
                         <div className="form-group">
-                            <button className="btn btn-primary btn-block" onClick={addPost}>Submit</button>
+                            <button className="btn btn-block customBtnClrAlt" onClick={addPost}>Submit</button>
                         </div>
                     </div>
                 </div>
