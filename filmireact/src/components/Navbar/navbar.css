@@ -14,9 +14,13 @@
     position: sticky;
     top: 0;
     z-index: 9px;
-    background-color: #fff !important;
+    background-color: white !important; /* Add this line */
 }
 
 .navbar .dropdown-menu {
     z-index: inherit; /* You can adjust this value based on your needs */
   }
+
+  .customNavItem, .customNavItem:hover {
+    color: #eecd1d !important;
+}

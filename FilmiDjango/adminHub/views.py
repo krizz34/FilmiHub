@@ -14,6 +14,9 @@ from .serializers import movieSerializer
 
 from datetime import datetime
 
+from django.utils import timezone
+from django.db.models import Q
+
 
 
 
@@ -126,3 +129,11 @@ def apiSearch(request, movieName):
         return Response(serializer.data)
     else:
         return Response({'error': 'movie not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def apiAdminRead(request):
+    current_date = timezone.now().date()
+    admin_movies = movie.objects.filter(Q(movieEndDate__gt=current_date))
+    serializer = movieSerializer(admin_movies, many=True)
+    return Response(serializer.data)

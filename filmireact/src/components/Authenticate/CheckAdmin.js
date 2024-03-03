@@ -9,16 +9,14 @@ export const checkAdmin = (Component) => {
     const alertShown = useRef(false);
 
     useEffect(() => {
-      console.log("Checking admin status...");
-      console.log("User:", user);
+
 
       if (!(user && user.username === 'admin@FilmiHub') && !alertShown.current) {
-        // Display alert for non-admin users and redirect to the home page
         alert("You are not an admin");
         navigate('/');
         alertShown.current = true;
       } else {
-        console.log("User is an admin. Proceeding...");
+        // console.log("User is an admin. Proceeding...");
       }
     }, [user, navigate]);
 

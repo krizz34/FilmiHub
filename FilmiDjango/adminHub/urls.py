@@ -11,6 +11,8 @@ urlpatterns = [
     path('APIupdate/<int:pk>/', views.apiUpdate, name='APIupdate'),
     path('APIdelete/<int:pk>/', views.apiDelete, name='APIdelete'),
     path('APIsearch/<str:movieName>/', views.apiSearch, name='APIsearch'),
+    path('APIadminRead/', views.apiAdminRead, name='APIadminRead'),
+
 
 
 ]
