@@ -69,10 +69,10 @@ function ListPosts() {
   return (
     <div className="customBg">
       <Navbar />
-      <div className="container w-50 bg-white rounded mt-5 p-3">
+      <div className="container w-75 bg-white rounded mt-5 p-3">
         <div className="row">
           <div className="col-12">
-            <h1 className="text-center my-4" style={{ fontWeight: 'bold', color: '#eecd1d' }}>Movie List</h1>
+            <h1 className="text-center my-4" style={{ fontWeight: 'bold', color: '#eecd1d' }}>Admin Movie List</h1>
           </div>
         </div>
         <div className="row">

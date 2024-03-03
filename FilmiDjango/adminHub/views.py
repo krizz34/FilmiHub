@@ -62,18 +62,43 @@ def apiLogout(request):
 @permission_classes([IsAuthenticated])
 def apiCreate(request):
     createData = movieForm(request.data)
+    
     if createData.is_valid():
+        new_movie_start_date = createData.cleaned_data['movieFromDate']
+        new_movie_end_date = createData.cleaned_data['movieEndDate']
+        new_movie_time_slot = createData.cleaned_data['movieTime']
+
+        # Check for existing movies with the same date and time slot
+        conflicting_movies = movie.objects.filter(
+            (Q(movieFromDate__lte=new_movie_start_date) & Q(movieEndDate__gte=new_movie_start_date)) |
+            (Q(movieFromDate__lte=new_movie_end_date) & Q(movieEndDate__gte=new_movie_end_date)) |
+            (Q(movieFromDate__gte=new_movie_start_date) & Q(movieEndDate__lte=new_movie_end_date)),
+            Q(movieTime=new_movie_time_slot)
+        )
+
+        if conflicting_movies.exists():
+            return Response({'error': 'A movie already exists with the same date and time slot'}, status=status.HTTP_400_BAD_REQUEST)
+
         # Convert the date format before saving to the database
-        createData.cleaned_data['movieFromDate'] = createData.cleaned_data['movieFromDate'].strftime('%Y-%m-%d')
-        createData.cleaned_data['movieEndDate'] = createData.cleaned_data['movieEndDate'].strftime('%Y-%m-%d')
+        createData.cleaned_data['movieFromDate'] = new_movie_start_date.strftime('%Y-%m-%d')
+        createData.cleaned_data['movieEndDate'] = new_movie_end_date.strftime('%Y-%m-%d')
+        
         product = createData.save()
         return Response({'id': product.id}, status=status.HTTP_201_CREATED)
-    
+
     return Response(createData.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def apiRead(request):
+    current_date = timezone.now().date()
+    admin_movies = movie.objects.filter(Q(movieEndDate__gt=current_date))
+    serializer = movieSerializer(admin_movies, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def apiAdminRead(request):
     products = movie.objects.all()
     serializer = movieSerializer(products, many=True)
     return Response(serializer.data)
@@ -101,11 +126,27 @@ def apiUpdate(request, pk):
     form = movieForm(request.data, instance=product_instance)
 
     if form.is_valid():
+        new_movie_start_date = form.cleaned_data['movieFromDate']
+        new_movie_end_date = form.cleaned_data['movieEndDate']
+        new_movie_time_slot = form.cleaned_data['movieTime']
+
+        # Check for existing movies with the same date and time slot
+        conflicting_movies = movie.objects.filter(
+            (Q(movieFromDate__lte=new_movie_start_date) & Q(movieEndDate__gte=new_movie_start_date)) |
+            (Q(movieFromDate__lte=new_movie_end_date) & Q(movieEndDate__gte=new_movie_end_date)) |
+            (Q(movieFromDate__gte=new_movie_start_date) & Q(movieEndDate__lte=new_movie_end_date)),
+            Q(movieTime=new_movie_time_slot)
+        ).exclude(pk=pk)  # Exclude the current movie being updated from the conflict check
+
+        if conflicting_movies.exists():
+            return Response({'error': 'A movie already exists with the same date and time slot'}, status=status.HTTP_400_BAD_REQUEST)
+
         form.save()
         serializer = movieSerializer(product_instance)
         return Response(serializer.data)
     else:
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['DELETE'])
@@ -130,10 +171,3 @@ def apiSearch(request, movieName):
     else:
         return Response({'error': 'movie not found'}, status=status.HTTP_404_NOT_FOUND)
     
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def apiAdminRead(request):
-    current_date = timezone.now().date()
-    admin_movies = movie.objects.filter(Q(movieEndDate__gt=current_date))
-    serializer = movieSerializer(admin_movies, many=True)
-    return Response(serializer.data)

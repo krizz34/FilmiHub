@@ -36,8 +36,6 @@ function EditPost() {
     },[postId, user]);
 
     function updatePost(){
-       
-
         axios.put(`http://127.0.0.1:8000/adminHub/APIupdate/${postId}/`,{
             movieName: movieName,
             movieDesc: movieDesc,
@@ -49,9 +47,19 @@ function EditPost() {
         },
         {
             headers: { 'Authorization': "token " + user.token }
-          }).then(response=>{
+        })
+        .then(response=>{
             alert(response.data.message)
         })
+        .catch(error => {
+            if (error.response) {
+                alert(`Error: ${error.response.data.error}`);
+            } else if (error.request) {
+                alert('No response received from the server');
+            } else {
+                alert('Error setting up the request');
+            }
+        });
         navigate('/readAPI');
     } var user = useSelector(store=>store.auth.user);
     return(

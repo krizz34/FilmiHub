@@ -30,10 +30,24 @@ function CreatePost() {
             movieEndDate: movieEndDate,
         }, {
             headers: { 'Authorization': "token " + user.token }
-        }).then(response => {
+        })
+        .then(response => {
             alert(response.data.message);
             navigate('/readAPI');
         })
+        .catch(error => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                alert(`Error: ${error.response.data.error}`);
+            } else if (error.request) {
+                // The request was made but no response was received
+                alert('No response received from the server');
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                alert('Error setting up the request');
+            }
+        });
     }
 
     return (
