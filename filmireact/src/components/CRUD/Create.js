@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 
 import Navbar from "../Navbar/Navbar";
 import checkAuth from "../Authenticate/CheckAuth";
+import checkAdmin from "../Authenticate/CheckAdmin";
 
 function CreatePost() {
     const user = useSelector(store => store.auth.user);
@@ -86,4 +87,4 @@ function CreatePost() {
     )
 }
 
-export default checkAuth(CreatePost);
+export default checkAuth(checkAdmin(CreatePost));
