@@ -43,7 +43,7 @@ function Login() {
     
     return (<div className="customBg">
         <Navbar/>
-        <div className="container w-50 bg-white rounded mt-5 p-3">
+        <div className="container w-25 bg-white rounded mt-5 p-3">
             <div className="row">
                 <div className="col-8 offset-2">
                     <h1 style={{ fontWeight: 'bold', color: '#eecd1d' }}>Login</h1>

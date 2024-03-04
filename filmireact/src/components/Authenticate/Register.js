@@ -28,7 +28,7 @@ function Register() {
     }
     return(
     <div className="customBg">
-        <div className="container w-50 bg-white rounded mt-5 p-3">
+        <div className="container w-25 bg-white rounded mt-5 p-3">
             <div className="row">
                 <div className="col-8 offset-2">
                     <h1 style={{ fontWeight: 'bold', color: '#eecd1d' }}>Sign Up</h1>
