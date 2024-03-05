@@ -5,6 +5,7 @@ import Navbar from "../Navbar/Navbar";
 
 function Register() {
     var [username, setUsername] = useState('');
+    var [email, setEmail] = useState('');
     var [password1, setPassword1] = useState('');
     var [password2, setPassword2] = useState('');
     var [errorMessage, setErrorMessage] = useState('');
@@ -12,9 +13,11 @@ function Register() {
     function registerUser(){
         var user = {
             username: username,
+            email: email,
             password1: password1,
             password2: password2
         }
+        console.log(user); // Log the user object
         axios.post('http://127.0.0.1:8000/adminHub/APIsignup/',user).then(response=>{
             setErrorMessage('');
             navigate('/login');
@@ -39,6 +42,14 @@ function Register() {
                         className="form-control"
                         value={username}
                         onInput={(event)=>setUsername(event.target.value)}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Email:</label>
+                        <input type="text"
+                        className="form-control"
+                        value={email}
+                        onInput={(event)=>setEmail(event.target.value)}
                         />
                     </div>
                     <div className="form-group">

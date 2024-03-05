@@ -12,6 +12,8 @@ urlpatterns = [
     path('APIdelete/<int:pk>/', views.apiDelete, name='APIdelete'),
     path('APIsearch/<str:movieName>/', views.apiSearch, name='APIsearch'),
     path('APIadminRead/', views.apiAdminRead, name='APIadminRead'),
+    path('APIcreatebooking/<int:movie_id>/', views.apiCreateBooking, name='apiCreateBooking'),
+    path('APIcheckavailability/<str:bookingDate>/<str:bookingTime>/', views.apiCheckAvailability, name='apiCheckAvailability'),
 
 
 

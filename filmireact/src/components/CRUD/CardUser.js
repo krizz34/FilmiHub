@@ -103,7 +103,7 @@ function MovieCard(props) {
                     <h5 className="card-title">{props.post.movieName}</h5>
                     <p className="card-text" style={{ marginTop: '-40px' }}>{props.post.movieDesc}</p>
                     <div className="text-center">
-                        <Link to={`/updateAPI/${props.post.id}/edit`} className="btn btn-block mb-2 bookNowBtn">
+                        <Link to={`/viewAPI/${props.post.id}`} className="btn btn-block mb-2 bookNowBtn">
                             Book Now
                         </Link>
                     </div>

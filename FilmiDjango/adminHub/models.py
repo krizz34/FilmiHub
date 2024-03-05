@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime, timedelta
+from django.contrib.auth.models import User
+
 
 class movie(models.Model):
     movieName = models.CharField(max_length=100)
@@ -14,3 +16,11 @@ class movie(models.Model):
     ])
     movieFromDate = models.DateField()
     movieEndDate = models.DateField(default=datetime.now() + timedelta(days=30))
+
+class BookingRecord(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.ForeignKey(movie, on_delete=models.CASCADE)
+    bookingDate = models.DateField()
+    bookingTime = models.CharField(max_length=10)
+    noOfBookings = models.PositiveIntegerField()
+    seatNumbers = models.CharField(max_length=200)

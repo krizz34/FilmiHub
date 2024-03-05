@@ -6,16 +6,23 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NO
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
-from rest_framework import status
-from rest_framework.authtoken.models import Token
-from .forms import movieForm
-from .models import movie
-from .serializers import movieSerializer
-
 from datetime import datetime
-
 from django.utils import timezone
 from django.db.models import Q
+from django.db.models import Sum
+
+
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+
+from .forms import CustomUserCreationForm
+
+from .models import movie
+from .forms import movieForm
+from .serializers import movieSerializer
+
+from .models import BookingRecord
+from .serializers import bookingSerializer
 
 
 
@@ -23,11 +30,14 @@ from django.db.models import Q
 @api_view(['POST'])
 @permission_classes((AllowAny,))
 def apiSignup(request):
-    form = UserCreationForm(data=request.data)
+    form = CustomUserCreationForm(data=request.data)
+    
     if form.is_valid():
         user = form.save()
         return Response("account created successfully", status=status.HTTP_201_CREATED)
-    return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        print(form.errors)  # Log or print the form errors for debugging
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @csrf_exempt
 @api_view(["POST"])
@@ -170,4 +180,50 @@ def apiSearch(request, movieName):
         return Response(serializer.data)
     else:
         return Response({'error': 'movie not found'}, status=status.HTTP_404_NOT_FOUND)
-    
+
+@api_view(['GET', 'OPTIONS'])
+@permission_classes([IsAuthenticated])
+def apiCheckAvailability(request, bookingDate, bookingTime):
+    try:
+        # Retrieve the total number of bookings for the given date and time
+        total_bookings = BookingRecord.objects.filter(
+            bookingDate=bookingDate,
+            bookingTime=bookingTime
+        ).aggregate(Sum('noOfBookings'))['noOfBookings__sum']
+
+        # If there are no bookings, set total_bookings to 0
+        total_bookings = total_bookings or 0
+
+        return Response({'totalBookings': total_bookings}, status=status.HTTP_200_OK)
+    except BookingRecord.DoesNotExist:
+        return Response({'error': 'No bookings found for the specified date and time'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def apiCreateBooking(request, movie_id):
+    movie_instance = movie.objects.get(pk=movie_id)
+
+    seat_numbers = 0
+
+
+    # Extract data from the request
+    booking_data = {
+        'user': request.user.id,
+        'movie': movie_instance.id,
+        'bookingDate': request.data.get('bookingDate'),
+        'bookingTime': movie_instance.movieTime,  # Use movie time from the retrieved movie instance
+        'noOfBookings': request.data.get('noOfBookings'),
+        'seatNumbers': seat_numbers 
+    }
+
+    # Create a serializer instance with the data
+    serializer = bookingSerializer(data=booking_data)
+
+    # Validate and save the data to the database
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'message': 'Booking record created successfully'}, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
