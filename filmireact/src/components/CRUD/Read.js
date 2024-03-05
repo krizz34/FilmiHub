@@ -98,7 +98,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
-import Card from "./Card";
+import Card from "./CardUser";
 import checkAuth from "../Authenticate/CheckAuth";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -188,14 +188,17 @@ function ListPosts() {
 
 
             
-
+            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-2"> {/* Adjust the number of columns based on your design */}
             {filteredPosts.length === 0 ? (
               <p>No matching medicines found.</p>
             ) : (
               filteredPosts.map((post) => (
-                <Card key={post.id} post={post} refresh={fetchPosts} />
+                <div key={post.id} className="col">
+                  <Card post={post} refresh={fetchPosts} />
+                </div>
               ))
             )}
+            </div>
           </div>
         </div>
       </div>

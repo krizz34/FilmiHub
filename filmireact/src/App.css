@@ -42,6 +42,8 @@
   background-color: #000000 !important;
   color: #eecd1d !important;
   font-weight: bold !important;
+  width: fit-content !important;
+  padding-left: 28px !important;
 }
 
 .customBtnClrAlt {
@@ -49,6 +51,8 @@
   color: black !important;
   font-weight: bold !important;
   cursor: pointer !important;
+  width: fit-content !important;
+  padding-left: 28px !important;
 }
 
 .search-container {

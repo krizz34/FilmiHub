@@ -103,15 +103,9 @@ function MovieCard(props) {
                     <h5 className="card-title">{props.post.movieName}</h5>
                     <p className="card-text" style={{ marginTop: '-40px' }}>{props.post.movieDesc}</p>
                     <div className="text-center">
-                    <button className="btn btn-danger btn-sm m-1 border-0" style={{ backgroundColor: '#000000', color: '#d71129' }} onClick={handleShow}>
-                     <FontAwesomeIcon icon={faTrashAlt} />
-                 </button>
-                 <Link to={`/updateAPI/${props.post.id}/edit`} className="btn btn-primary btn-sm m-1 border-0" style={{ backgroundColor: '#000000', color: '#808080' }}>
-                     <FontAwesomeIcon icon={faPencilAlt} />
-                 </Link>
-                 <Link to={`/viewAPI/${props.post.id}`} className="btn btn-info btn-sm m-1 border-0" style={{ backgroundColor: '#000000', color: '#eecd1d'}}>
-                     <FontAwesomeIcon icon={faEye} />
-                 </Link>
+                        <Link to={`/updateAPI/${props.post.id}/edit`} className="btn btn-block mb-2 bookNowBtn">
+                            Book Now
+                        </Link>
                     </div>
                 </div>
 
