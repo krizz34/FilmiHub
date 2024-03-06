@@ -9,6 +9,9 @@ import AdminListPosts from "./components/CRUD/adminRead";
 import CreateAPI from "./components/CRUD/Create";
 import ViewAPI from "./components/CRUD/View";
 import UpdateAPI from "./components/CRUD/Update";
+import BookingRead from "./components/Booking/ReadBooking";
+import bookingDetails from "./components/Booking/bookingDetails";
+
 
 
 
@@ -25,6 +28,8 @@ const router = createBrowserRouter([
     { path: 'createAPI', element:<CreateAPI/>},
     { path: 'viewAPI/:postId', element:<ViewAPI/>},
     { path: 'updateAPI/:postId/edit', element:<UpdateAPI/>},
+    { path: 'BookingRead', element:<BookingRead/>},
+    { path: 'bookingDetails', element:<bookingDetails/>},
 
 ]);
 

@@ -21,7 +21,7 @@ from .models import movie
 from .forms import movieForm
 from .serializers import movieSerializer
 
-from .models import BookingRecord
+from .models import BookingRegister
 from .serializers import bookingSerializer
 
 
@@ -181,21 +181,26 @@ def apiSearch(request, movieName):
     else:
         return Response({'error': 'movie not found'}, status=status.HTTP_404_NOT_FOUND)
 
-@api_view(['GET', 'OPTIONS'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def apiCheckAvailability(request, bookingDate, bookingTime):
     try:
-        # Retrieve the total number of bookings for the given date and time
-        total_bookings = BookingRecord.objects.filter(
+        total_bookings = BookingRegister.objects.filter(
             bookingDate=bookingDate,
             bookingTime=bookingTime
         ).aggregate(Sum('noOfBookings'))['noOfBookings__sum']
 
-        # If there are no bookings, set total_bookings to 0
         total_bookings = total_bookings or 0
+        total_capacity = 10
 
-        return Response({'totalBookings': total_bookings}, status=status.HTTP_200_OK)
-    except BookingRecord.DoesNotExist:
+        seats_available = total_capacity - total_bookings
+
+        if seats_available > 0:
+            return Response({'seatsAvailable': seats_available}, status=status.HTTP_200_OK)
+        else:
+            return Response({'seatsAvailable': 'Sorry! Housefull'}, status=status.HTTP_200_OK)
+
+    except BookingRegister.DoesNotExist:
         return Response({'error': 'No bookings found for the specified date and time'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -205,25 +210,45 @@ def apiCheckAvailability(request, bookingDate, bookingTime):
 def apiCreateBooking(request, movie_id):
     movie_instance = movie.objects.get(pk=movie_id)
 
-    seat_numbers = 0
+    seats_available = request.data.get('seatsAvailable', 0)
+    no_of_bookings = int(request.data.get('noOfBookings', 0))
 
-
-    # Extract data from the request
+    # Initialize booking_data before appending to seat_numbers
     booking_data = {
         'user': request.user.id,
         'movie': movie_instance.id,
         'bookingDate': request.data.get('bookingDate'),
-        'bookingTime': movie_instance.movieTime,  # Use movie time from the retrieved movie instance
+        'bookingTime': movie_instance.movieTime,
         'noOfBookings': request.data.get('noOfBookings'),
-        'seatNumbers': seat_numbers 
+        'seatNumbers': ''
     }
 
-    # Create a serializer instance with the data
+    seat_numbers = []
+
+    for i in range(no_of_bookings, 0, -1):
+        seat_number = seats_available - i + 1
+        seat_numbers.append(f'LUXE {seat_number}')
+
+    # Now join seat_numbers and assign to 'seatNumbers' in booking_data
+    booking_data['seatNumbers'] = ', '.join(seat_numbers)
+
+    # test
+    print(f"Received booking data: {booking_data}")
+
     serializer = bookingSerializer(data=booking_data)
 
-    # Validate and save the data to the database
     if serializer.is_valid():
         serializer.save()
         return Response({'message': 'Booking record created successfully'}, status=status.HTTP_201_CREATED)
     else:
+        print(f"Serialized data: {serializer.data}")  # Add this line
+        print(f"Request data: {request.data}")  # Add this line
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def apiBookingRead(request):
+    user_bookings = BookingRegister.objects.filter(user=request.user)
+    serializer = bookingSerializer(user_bookings, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

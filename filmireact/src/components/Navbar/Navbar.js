@@ -53,7 +53,7 @@ const Navbar = () => {
         </NavLink>
       </li>
       <li className="nav-item customNavItem">
-        <NavLink to={"/bookings"} className={'nav-link font-weight-bold customNavItem' +(status => status.isActive ? 'active' : '')} style={{ color: '#eecd1d' }}>
+        <NavLink to={"/BookingRead"} className={'nav-link font-weight-bold customNavItem' +(status => status.isActive ? 'active' : '')} style={{ color: '#eecd1d' }}>
           Your Bookings
         </NavLink>
       </li>

@@ -14,6 +14,7 @@ urlpatterns = [
     path('APIadminRead/', views.apiAdminRead, name='APIadminRead'),
     path('APIcreatebooking/<int:movie_id>/', views.apiCreateBooking, name='apiCreateBooking'),
     path('APIcheckavailability/<str:bookingDate>/<str:bookingTime>/', views.apiCheckAvailability, name='apiCheckAvailability'),
+    path('APIreadbookings/', views.apiBookingRead, name='apiBookingRead'),
 
 
 

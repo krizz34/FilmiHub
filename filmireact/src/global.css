@@ -27,4 +27,37 @@
   ::-webkit-resizer {
     background-color: #fff; /* Color of the scrollbar resizer */
   }
+
+  @font-face {
+    font-family: 'Rocher';
+    src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
+  }
+  
+
+  h6 {
+    font-family: 'Rocher';
+    font-size: 18px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  
+  
+  @font-palette-values --Mint {
+    font-family: Rocher;
+    base-palette: 7;
+  }
+
+  @font-palette-values --Grays {
+    font-family: Rocher;
+    base-palette: 9;
+  }
+  
+  
+  .mint {
+    font-palette: --Mint;
+  }
+  
+  .purples {
+    font-palette: --Purples;
+  }
   

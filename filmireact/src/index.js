@@ -6,23 +6,23 @@ import { RouterProvider } from 'react-router-dom';
 import router from './router';
 
 import { Provider } from 'react-redux';
-import store from './components/Redux/Store';
+import { PersistGate } from 'redux-persist/integration/react'; // Import PersistGate
+import { store, persistor } from './components/Redux/Store'; // Import store and persistor
 
 import AutoLogin from './components/Authenticate/AutoLogin';
 import './global.css';
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <AutoLogin>
-        <RouterProvider router = {router} />
-      </AutoLogin>
-    </Provider>      
-  </React.StrictMode>
+      <PersistGate loading={null} persistor={persistor}> {/* Wrap your components with PersistGate */}
+        <AutoLogin>
+          <RouterProvider router={router} />
+        </AutoLogin>
+      </PersistGate>
+    </Provider>
+  </React.StrictMode>,
 );
-
-
 
 reportWebVitals();

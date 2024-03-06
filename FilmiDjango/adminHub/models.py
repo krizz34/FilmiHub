@@ -17,7 +17,7 @@ class movie(models.Model):
     movieFromDate = models.DateField()
     movieEndDate = models.DateField(default=datetime.now() + timedelta(days=30))
 
-class BookingRecord(models.Model):
+class BookingRegister(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.ForeignKey(movie, on_delete=models.CASCADE)
     bookingDate = models.DateField()

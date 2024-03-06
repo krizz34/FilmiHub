@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom"
 import { useSelector } from 'react-redux';
 import Navbar from "../Navbar/Navbar";
 import checkAuth from "../Authenticate/CheckAuth";
+import '../../global.css';
+
 
 
 function ViewPost() {
@@ -14,13 +16,17 @@ function ViewPost() {
     const [bookingDate, setBookingDate] = useState('');
     const [bookingTime, setBookingTime] = useState('');
     const [noOfBookings, setNoOfBookings] = useState('');
+    const [seatsAvailable, setSeatsAvailable] = useState(null);
+
 
     useEffect(()=>{
-        axios.get(`http://127.0.0.1:8000/adminHub/APIreadspecial/${postId}/`, {
-            headers: { 'Authorization': "token " + user.token }
-          }).then(response=>{
-            setPost(response.data)
-        })
+        if (user) {
+            axios.get(`http://127.0.0.1:8000/adminHub/APIreadspecial/${postId}/`, {
+                headers: { 'Authorization': "token " + user.token }
+            }).then(response => {
+                setPost(response.data);
+            });
+        }
     },[postId, user]);
 
     function addBookingRecord(){
@@ -28,16 +34,19 @@ function ViewPost() {
             bookingDate: bookingDate,
             bookingTime: post.movieTime,
             noOfBookings: noOfBookings,
+            seatsAvailable: seatsAvailable,
         }, {
             headers: { 'Authorization': "token " + user.token }
         })
         .then(response => {
             alert(response.data.message);
+            window.location.reload();
             // navigate('/readAPI');
         })
         .catch(error => {
             if (error.response) {
                 alert(`Error: ${error.response.data.error}`);
+                console.log(error.response.data.error)
             } else if (error.request) {
                 alert('No response received from the server');
             } else {
@@ -50,13 +59,27 @@ function ViewPost() {
         axios.get(`http://127.0.0.1:8000/adminHub/APIcheckavailability/${bookingDate}/${post.movieTime}/`, {
             headers: { 'Authorization': "token " + user.token }
         })
-            .then(response => {
-                alert(`Total Bookings for ${bookingDate} and ${post.movieTime}: ${response.data.totalBookings}`);
-            })
-            .catch(error => {
-                alert(`Error checking availability: ${error.response ? error.response.data.error : error.message}`);
-                console.log(error.response);
-            }, [user]);
+        .then(response => {
+            if (response.data.seatsAvailable !== undefined) {
+                setSeatsAvailable(response.data.seatsAvailable);
+            } else {
+                alert(response.data.message);
+                // Handle the case where the message is 'Sorry Housefull'
+            }
+        })
+        .catch(error => {
+            handleApiError(error);
+        }, [user]);
+    }
+
+    function handleApiError(error) {
+        if (error.response) {
+            alert(`Error: ${error.response.data.error}`);
+        } else if (error.request) {
+            alert('No response received from the server');
+        } else {
+            alert('Error setting up the request');
+        }
     }
 
     return(
@@ -85,18 +108,27 @@ function ViewPost() {
                         <div className="form-group">
                             <button className="btn btn-block customBtnClrAlt" onClick={checkAvailability}>Check Availability</button>
                         </div>
-                        <div className="form-group">
-                            <label>No of seats:</label>
-                            <select className="form-control" value={noOfBookings} onChange={(event) => { setNoOfBookings(event.target.value) }}>
-                                <option value="" disabled>select-seat-count</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <button className="btn btn-block customBtnClrAlt" onClick={addBookingRecord}>Submit</button>
-                        </div>
+                        {typeof seatsAvailable === 'number' ? (
+                            <>
+                                <h6 className="gray">No. of seats available: {seatsAvailable}</h6>
+                                <div className="form-group">
+                                    <label>No of seats:</label>
+                                    <select className="form-control" value={noOfBookings} onChange={(event) => { setNoOfBookings(event.target.value) }}>
+                                        <option value="" disabled>select-seat-count</option>
+                                        {seatsAvailable >= 3 ? <option value="3">3</option> : <option value="3" disabled>3</option>}
+                                        {seatsAvailable >= 2 ? <option value="2">2</option> : <option value="2" disabled>2</option>}
+                                        {seatsAvailable >= 1 ? <option value="1">1</option> : <option value="1" disabled>1</option>}
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <button className="btn btn-block customBtnClrAlt" onClick={addBookingRecord}>Submit</button>
+                                </div>
+                            </>
+                        ) : seatsAvailable === 'Sorry! Housefull' ? (
+                            <h6 className="gray" style={{ fontSize: '32px' }}>{seatsAvailable}</h6>
+                        ) : (
+                            <p>{seatsAvailable}</p>
+                        )}
                     </div>
                 </div>
             </div>
