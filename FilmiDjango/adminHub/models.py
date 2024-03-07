@@ -24,3 +24,4 @@ class BookingRegister(models.Model):
     bookingTime = models.CharField(max_length=10)
     noOfBookings = models.PositiveIntegerField()
     seatNumbers = models.CharField(max_length=200)
+    bookingQR = models.FileField(upload_to='booking_qr/', null=True, blank=True)

@@ -15,6 +15,10 @@ from django.db.models import Sum
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
+import qrcode
+from io import BytesIO
+from django.core.files import File
+
 from .forms import CustomUserCreationForm
 
 from .models import movie
@@ -220,7 +224,7 @@ def apiCreateBooking(request, movie_id):
         'bookingDate': request.data.get('bookingDate'),
         'bookingTime': movie_instance.movieTime,
         'noOfBookings': request.data.get('noOfBookings'),
-        'seatNumbers': ''
+        'seatNumbers': '',
     }
 
     seat_numbers = []
@@ -232,18 +236,37 @@ def apiCreateBooking(request, movie_id):
     # Now join seat_numbers and assign to 'seatNumbers' in booking_data
     booking_data['seatNumbers'] = ', '.join(seat_numbers)
 
-    # test
-    print(f"Received booking data: {booking_data}")
-
     serializer = bookingSerializer(data=booking_data)
 
     if serializer.is_valid():
-        serializer.save()
+        # Save the booking record
+        booking_instance = serializer.save()
+
+        # Generate QR code
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+
+        # Include booking details in QR code
+        qr.add_data(f"Booking ID: {booking_instance.id}\nMovie: {movie_instance.movieName}\nDate: {booking_instance.bookingDate}\nTime: {booking_instance.bookingTime}\nSeats: {booking_instance.seatNumbers}")
+        qr.make(fit=True)
+
+        # Create BytesIO object to store QR code image
+        qr_img = BytesIO()
+        img = qr.make_image(fill_color="black", back_color="white")
+        img.save(qr_img)
+        qr_img.seek(0)
+
+        # Save QR code image in BookingRegister model
+        booking_instance.bookingQR.save(f"booking_{booking_instance.id}.png", File(qr_img))
+
         return Response({'message': 'Booking record created successfully'}, status=status.HTTP_201_CREATED)
     else:
-        print(f"Serialized data: {serializer.data}")  # Add this line
-        print(f"Request data: {request.data}")  # Add this line
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['GET'])
