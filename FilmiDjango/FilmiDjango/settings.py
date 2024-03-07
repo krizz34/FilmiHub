@@ -125,12 +125,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
 
-# Use the SMTP email backend
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-# Email server settings for a typical Gmail account
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'anandakrizz@gmail.com'  # Replace with your email
-EMAIL_HOST_PASSWORD = ''  # Replace with your email password
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '99c1e67f054bfd'
+EMAIL_HOST_PASSWORD = 'db1d27e7c7a8d1'
+EMAIL_PORT = '2525'
