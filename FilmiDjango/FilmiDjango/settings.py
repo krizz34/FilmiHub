@@ -125,8 +125,10 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 EMAIL_HOST_USER = '99c1e67f054bfd'
 EMAIL_HOST_PASSWORD = 'db1d27e7c7a8d1'
 EMAIL_PORT = '2525'
+
