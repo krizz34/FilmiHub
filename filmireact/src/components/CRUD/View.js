@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Navbar from "../Navbar/Navbar";
 import checkAuth from "../Authenticate/CheckAuth";
 import '../../global.css';
@@ -11,6 +12,7 @@ import '../../global.css';
 function ViewPost() {
     var user = useSelector(store => store.auth.user);
     var {postId} = useParams()
+    let navigate = useNavigate();
     // var [post,setPost] = useState({title:'',content:''})
     var [post,setPost] = useState({movieName:'',movieDesc:'',movieGenre:'',movieCost:'',movieTime:'',movieFromDate:'',movieEndDate:''})
     const [bookingDate, setBookingDate] = useState('');
@@ -40,8 +42,7 @@ function ViewPost() {
         })
         .then(response => {
             alert(response.data.message);
-            window.location.reload();
-            // navigate('/readAPI');
+            navigate('/bookingDetails');
         })
         .catch(error => {
             if (error.response) {

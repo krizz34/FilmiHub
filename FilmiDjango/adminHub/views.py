@@ -18,6 +18,14 @@ from rest_framework.authtoken.models import Token
 import qrcode
 from io import BytesIO
 from django.core.files import File
+from django.core.files.base import ContentFile
+
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+from xhtml2pdf import pisa
+from django.template.loader import get_template
 
 from .forms import CustomUserCreationForm
 
@@ -212,12 +220,16 @@ def apiCheckAvailability(request, bookingDate, bookingTime):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def apiCreateBooking(request, movie_id):
-    movie_instance = movie.objects.get(pk=movie_id)
+    movie_instance = get_object_or_404(movie, pk=movie_id)
+
+
 
     seats_available = request.data.get('seatsAvailable', 0)
     no_of_bookings = int(request.data.get('noOfBookings', 0))
 
-    # Initialize booking_data before appending to seat_numbers
+
+
+
     booking_data = {
         'user': request.user.id,
         'movie': movie_instance.id,
@@ -227,31 +239,35 @@ def apiCreateBooking(request, movie_id):
         'seatNumbers': '',
     }
 
-    seat_numbers = []
 
+
+
+    seat_numbers = []
     for i in range(no_of_bookings, 0, -1):
         seat_number = seats_available - i + 1
         seat_numbers.append(f'LUXE {seat_number}')
-
-    # Now join seat_numbers and assign to 'seatNumbers' in booking_data
     booking_data['seatNumbers'] = ', '.join(seat_numbers)
+
+
+
 
     serializer = bookingSerializer(data=booking_data)
 
+
+
+
     if serializer.is_valid():
-        # Save the booking record
         booking_instance = serializer.save()
 
-        # Generate QR code
+        # Generate QR code after saving the object
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
             box_size=10,
             border=4,
         )
-
-        # Include booking details in QR code
-        qr.add_data(f"Booking ID: {booking_instance.id}\nMovie: {movie_instance.movieName}\nDate: {booking_instance.bookingDate}\nTime: {booking_instance.bookingTime}\nSeats: {booking_instance.seatNumbers}")
+        qr_data = f"Booking ID: {booking_instance.id}\nMovie: {movie_instance.movieName}\nDate: {booking_instance.bookingDate}\nTime: {booking_instance.bookingTime}\nSeats: {booking_instance.seatNumbers}"
+        qr.add_data(qr_data)
         qr.make(fit=True)
 
         # Create BytesIO object to store QR code image
@@ -260,13 +276,56 @@ def apiCreateBooking(request, movie_id):
         img.save(qr_img)
         qr_img.seek(0)
 
-        # Save QR code image in BookingRegister model
+        # Update the booking instance with the QR code
         booking_instance.bookingQR.save(f"booking_{booking_instance.id}.png", File(qr_img))
+
+        # Generate PDF
+        template = get_template('booking_template.html')
+        qr_code_url = booking_instance.bookingQR.url
+        print(qr_code_url)
+        context = {'booking_data': booking_instance, 'movie_instance': movie_instance, 'booking_QR': qr_code_url}
+        html_content = template.render(context)
+
+        # Save PDF in BookingRegister model using ContentFile
+        pdf_content = BytesIO()
+        pisa.CreatePDF(BytesIO(html_content.encode('UTF-8')), dest=pdf_content)
+        booking_instance.bookingPDF.save(f"booking_{booking_instance.id}.pdf", ContentFile(pdf_content.getvalue()))
+        
+
+
+
+
+        '''# Send email with PDF attachment
+        subject = 'Booking Confirmation'
+        to_email = request.user.email  # Assuming user's email is stored in the 'email' field
+        from_email = 'your_email@example.com'  # Set your own email address here
+
+        # Generate HTML content for the email body
+        email_context = {'booking_data': booking_instance, 'movie_instance': movie_instance}
+        email_body_html = render_to_string('booking_email_template.html', email_context)
+
+        # Create plain text version of the email body (optional)
+        email_body_text = strip_tags(email_body_html)
+
+        # Create EmailMessage object
+        email = EmailMessage(
+            subject,
+            email_body_text,
+            from_email,
+            [to_email],
+        )
+
+        # Attach the PDF file to the email
+        pdf_file_path = booking_instance.bookingPDF.path  # Assuming bookingPDF is a FileField in your model
+        email.attach_file(pdf_file_path, 'application/pdf')
+
+        # Send the email
+        email.send()
+'''
 
         return Response({'message': 'Booking record created successfully'}, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 @api_view(['GET'])

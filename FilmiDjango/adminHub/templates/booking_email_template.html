@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+</head>
+<body>
+    <h2>Booking Confirmation</h2>
+    <p>Dear {{ booking_data.user.username }},</p>
+    
+    <p>Your booking for the movie "{{ movie_instance.movieName }}" on {{ booking_data.bookingDate }} at {{ movie_instance.movieTime }} has been confirmed.</p>
+    
+    <p>Booking Details:</p>
+    <ul>
+        <li>Booking ID: {{ booking_data.id }}</li>
+        <li>Movie: {{ movie_instance.movieName }}</li>
+        <li>Date: {{ booking_data.bookingDate }}</li>
+        <li>Time: {{ movie_instance.movieTime }}</li>
+        <li>Seats: {{ booking_data.seatNumbers }}</li>
+    </ul>
+    
+    <p>Thank you for choosing our service!</p>
+</body>
+</html>

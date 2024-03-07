@@ -1,0 +1,22 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details</title>
+</head>
+<body>
+    <h2>Booking Details</h2>
+    <p>Booking ID: {{ booking_data.id }}</p>
+    <p>Movie: {{ movie_instance.movieName }}</p>
+    <p>Date: {{ booking_data.bookingDate }}</p>
+    <p>Time: {{ movie_instance.movieTime }}</p>
+    <p>Seats: {{ booking_data.seatNumbers }}</p>
+
+    <!-- Display the QR code using the provided URL -->
+    <img src="http://127.0.0.1:8000{{booking_QR}}" alt="Booking QR Code"/>
+
+</html>

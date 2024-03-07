@@ -27,7 +27,9 @@ function CardBooking(props) {
             .catch(error => {
                 console.error('Error fetching movie details:', error);
             });
-    }, [props.post.movie_id]);    
+    }, [props.post.movie_id]); 
+    console.log('Props.post:', props.post);
+   
     return (   
 
         <div className="col">
@@ -42,7 +44,7 @@ function CardBooking(props) {
                     <p className="card-text" style={{ marginTop: '-40px' }}>Time: {props.post.bookingTime}</p><br/>
                     <p className="card-text" style={{ marginTop: '-40px' }}>Seats: {props.post.seatNumbers}</p>
                     <div className="text-center">
-                        <Link to={`/bookingDetails`} className="btn btn-block mb-2 bookNowBtn">
+                        <Link to={"/bookingDetails"} className="btn btn-block mb-2 bookNowBtn">
                             Show Ticket
                         </Link>
                     </div>

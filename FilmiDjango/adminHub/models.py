@@ -25,3 +25,4 @@ class BookingRegister(models.Model):
     noOfBookings = models.PositiveIntegerField()
     seatNumbers = models.CharField(max_length=200)
     bookingQR = models.FileField(upload_to='booking_qr/', null=True, blank=True)
+    bookingPDF = models.FileField(upload_to='booking_pdfs/', blank=True, null=True)
