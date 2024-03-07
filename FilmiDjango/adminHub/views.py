@@ -295,33 +295,23 @@ def apiCreateBooking(request, movie_id):
 
 
 
-        '''# Send email with PDF attachment
         subject = 'Booking Confirmation'
-        to_email = request.user.email  # Assuming user's email is stored in the 'email' field
-        from_email = 'your_email@example.com'  # Set your own email address here
-
-        # Generate HTML content for the email body
+        to_email = request.user.email
+        from_email = 'admin@filmihub.io'
         email_context = {'booking_data': booking_instance, 'movie_instance': movie_instance}
         email_body_html = render_to_string('booking_email_template.html', email_context)
-
-        # Create plain text version of the email body (optional)
         email_body_text = strip_tags(email_body_html)
 
-        # Create EmailMessage object
         email = EmailMessage(
             subject,
             email_body_text,
             from_email,
             [to_email],
         )
-
-        # Attach the PDF file to the email
-        pdf_file_path = booking_instance.bookingPDF.path  # Assuming bookingPDF is a FileField in your model
+        pdf_file_path = booking_instance.bookingPDF.path
         email.attach_file(pdf_file_path, 'application/pdf')
 
-        # Send the email
         email.send()
-'''
 
         return Response({'message': 'Booking record created successfully'}, status=status.HTTP_201_CREATED)
     else:

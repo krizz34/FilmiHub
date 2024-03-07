@@ -19,6 +19,7 @@ function ViewPost() {
     const [bookingTime, setBookingTime] = useState('');
     const [noOfBookings, setNoOfBookings] = useState('');
     const [seatsAvailable, setSeatsAvailable] = useState(null);
+    const [selectedNoOfBookings, setSelectedNoOfBookings] = useState(null);
 
 
     useEffect(()=>{
@@ -83,6 +84,13 @@ function ViewPost() {
         }
     }
 
+    const calculateTotalAmount = () => {
+        if (selectedNoOfBookings !== null) {
+            return post.movieCost * selectedNoOfBookings;
+        }
+        return null;
+    };
+
     return(
         <div className="customBg">
             <Navbar />
@@ -114,13 +122,18 @@ function ViewPost() {
                                 <h6 className="gray">No. of seats available: {seatsAvailable}</h6>
                                 <div className="form-group">
                                     <label>No of seats:</label>
-                                    <select className="form-control" value={noOfBookings} onChange={(event) => { setNoOfBookings(event.target.value) }}>
+                                    <select className="form-control" value={noOfBookings} onChange={(event) => { setNoOfBookings(event.target.value); setSelectedNoOfBookings(event.target.value); }}>
                                         <option value="" disabled>select-seat-count</option>
                                         {seatsAvailable >= 3 ? <option value="3">3</option> : <option value="3" disabled>3</option>}
                                         {seatsAvailable >= 2 ? <option value="2">2</option> : <option value="2" disabled>2</option>}
                                         {seatsAvailable >= 1 ? <option value="1">1</option> : <option value="1" disabled>1</option>}
                                     </select>
                                 </div>
+                                {selectedNoOfBookings !== null && (
+                                    <div className="form-group">
+                                        <p>Total amount: {calculateTotalAmount()}</p>
+                                    </div>
+                                )}
                                 <div className="form-group">
                                     <button className="btn btn-block customBtnClrAlt" onClick={addBookingRecord}>Submit</button>
                                 </div>
