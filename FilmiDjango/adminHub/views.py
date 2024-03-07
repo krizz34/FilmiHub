@@ -301,6 +301,7 @@ def apiCreateBooking(request, movie_id):
         email_context = {'booking_data': booking_instance, 'movie_instance': movie_instance}
         email_body_html = render_to_string('booking_email_template.html', email_context)
         email_body_text = strip_tags(email_body_html)
+        #testing merge in git
 
         email = EmailMessage(
             subject,
