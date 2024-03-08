@@ -43,7 +43,7 @@ function ViewPost() {
         })
         .then(response => {
             alert(response.data.message);
-            navigate('/bookingDetails');
+            navigate('/BookingRead');
         })
         .catch(error => {
             if (error.response) {
@@ -91,6 +91,79 @@ function ViewPost() {
         return null;
     };
 
+
+    // razorPay
+    const loadScript = (src) => {
+        return new Promise((resolve) => {
+          const script = document.createElement("script");
+          script.src = src;
+          script.onload = () => {
+            resolve(true);
+          };
+          script.onerror = () => {
+            resolve(false);
+          };
+        document.body.appendChild(script);
+      });
+    };
+  
+    useEffect(() => {
+        loadScript("https://checkout.razorpay.com/v1/checkout.js");
+    });
+
+
+
+    function makePayment(e, totalAmount, movieName, user) {
+        e.preventDefault();
+    
+        let formData = new FormData();
+        formData.append('price', totalAmount);
+        formData.append('product_name', movieName);
+    
+        async function paymentGateway() {
+            try {
+                
+                const response = await axios.post(
+                    "http://127.0.0.1:8000/adminHub/new-order/",
+                    formData
+                );
+                const res = response.data;
+                return res;
+
+            } catch (error) {
+                console.error('Error making payment gateway request:', error);
+                throw error;
+            }
+        }
+    
+        paymentGateway(user).then((res) => {
+            // _________ call razorpay gateway ________
+            var options = {
+                "key": res.razorpay_key,
+                "amount": res.order.amount,
+                "currency": res.order.currency,
+                "callback_url": res.callback_url,
+                prefill: {
+                    "email": "nosob88243@xitudy.com",
+                    "contact": "1234567890"
+                },
+                "name": res.product_name,
+                "order_id": res.order.id,
+            };
+    
+            var rzp1 = new window.Razorpay(options);
+            rzp1.open();
+        });
+    }
+
+
+
+
+
+
+
+
+
     return(
         <div className="customBg">
             <Navbar />
@@ -134,6 +207,9 @@ function ViewPost() {
                                         <p>Total amount: {calculateTotalAmount()}</p>
                                     </div>
                                 )}
+                                <div className="form-group">
+                                    <button className="btn btn-block customBtnClr" onClick={e=>{makePayment(e, calculateTotalAmount(), post.movieName)}}>Proceed to Payment</button>
+                                </div>
                                 <div className="form-group">
                                     <button className="btn btn-block customBtnClrAlt" onClick={addBookingRecord}>Submit</button>
                                 </div>

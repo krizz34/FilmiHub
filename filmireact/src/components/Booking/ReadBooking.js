@@ -34,14 +34,14 @@ function BookingRead() {
     return (
         <div className="customBg">
             <Navbar/>
-            <div className="container w-50 bg-white rounded mt-5 p-3">
+            <div className="container w-75 bg-white rounded mt-5 p-3">
                 <div className="row">
                     <div className="col-12">
                         <h1 className="text-center my-4" style={{ fontWeight: 'bold', color: '#eecd1d' }}>Your Bookings</h1>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-8 offset-1">
+                    <div className="col-8 offset-2">
                         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-2"> {/* Adjust the number of columns based on your design */}
                             {filteredPosts.map((post) => (
                                 <CardBooking key={post.id} post={post} />

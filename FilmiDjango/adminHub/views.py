@@ -2,10 +2,10 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
-from django.contrib.auth.forms import UserCreationForm
 from datetime import datetime
 from django.utils import timezone
 from django.db.models import Q
@@ -35,6 +35,10 @@ from .serializers import movieSerializer
 
 from .models import BookingRegister
 from .serializers import bookingSerializer
+
+import razorpay
+from decimal import Decimal
+
 
 
 
@@ -301,7 +305,6 @@ def apiCreateBooking(request, movie_id):
         email_context = {'booking_data': booking_instance, 'movie_instance': movie_instance}
         email_body_html = render_to_string('booking_email_template.html', email_context)
         email_body_text = strip_tags(email_body_html)
-        #testing merge in git
 
         email = EmailMessage(
             subject,
@@ -325,3 +328,59 @@ def apiBookingRead(request):
     user_bookings = BookingRegister.objects.filter(user=request.user)
     serializer = bookingSerializer(user_bookings, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes((AllowAny,))
+def apiBookingReadSpecial(request, pk):
+    bookingDetails = BookingRegister.objects.get(pk=pk)
+    serializer = bookingSerializer(bookingDetails)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+#RazorPay
+
+
+razorpay_client = razorpay.Client(auth=("rzp_test_50SixNEzkjDT9g", "hl2ieBJVAiwtPwkVG5lSgF6Y"))
+
+@csrf_exempt
+@permission_classes([IsAuthenticated])
+def new_order(request):
+    if request.method == "POST":
+
+        print("", request.POST['price'])
+        amount = int(round(float(request.POST['price'])))
+        print("", request.POST['price'])
+        product_name = request.POST['product_name']
+
+        new_order_response = razorpay_client.order.create({
+                        "amount": amount*100,
+                        "currency": "INR",
+                        "payment_capture": "1"
+                      })
+
+        response_data = {
+                "callback_url": "http://127.0.0.1:8000/adminHub/callback/",
+                "razorpay_key": "rzp_test_dFP2CS0ZMKdXFz",
+                "order": new_order_response,
+                "product_name": product_name
+        }
+
+        print(response_data)
+
+        return JsonResponse(response_data)
+
+
+@csrf_exempt
+@permission_classes((AllowAny,))
+def order_callback(request):
+    if request.method == "POST":
+        if "razorpay_signature" in request.POST:
+            payment_verification = razorpay_client.utility.verify_payment_signature(request.POST)
+            if payment_verification:
+                return JsonResponse({"res":"success"})
+                # Logic to perform is payment is successful
+            else:
+                return JsonResponse({"res":"failed"})
+                # Logic to perform is payment is unsuccessful

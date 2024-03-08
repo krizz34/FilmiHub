@@ -32,19 +32,20 @@ function CardBooking(props) {
    
     return (   
 
-        <div className="col">
+        <div className="col"  style={{ marginBottom: '30px' }}>
             <div className="card h-100 shadow-sm">
-                <img src={sampleMovieImage} className="card-img-top" alt="Movie Poster" />
+                {/* <img src={sampleMovieImage} className="card-img-top" alt="Movie Poster" /> */}
                 <div className="card-body">
                     <div className="clearfix mb-3">
                         <span className="float-start badge rounded-pill bg-success"> Booked </span>
                     </div>
                     <h5 className="card-title">{movieName}</h5>
+                    <p className="card-text" style={{ marginTop: '-40px' }}>Booking ID: {props.post.id}</p><br/>
                     <p className="card-text" style={{ marginTop: '-40px' }}>Date: {props.post.bookingDate}</p><br/>
                     <p className="card-text" style={{ marginTop: '-40px' }}>Time: {props.post.bookingTime}</p><br/>
                     <p className="card-text" style={{ marginTop: '-40px' }}>Seats: {props.post.seatNumbers}</p>
                     <div className="text-center">
-                        <Link to={"/bookingDetails"} className="btn btn-block mb-2 bookNowBtn">
+                        <Link to={`/bookingDetails/${props.post.id}`} className="btn btn-block mb-2 bookNowBtn">
                             Show Ticket
                         </Link>
                     </div>

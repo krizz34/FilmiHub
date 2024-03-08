@@ -15,6 +15,9 @@ urlpatterns = [
     path('APIcreatebooking/<int:movie_id>/', views.apiCreateBooking, name='apiCreateBooking'),
     path('APIcheckavailability/<str:bookingDate>/<str:bookingTime>/', views.apiCheckAvailability, name='apiCheckAvailability'),
     path('APIreadbookings/', views.apiBookingRead, name='apiBookingRead'),
+    path('APIreadbookingsspecial/<int:pk>/', views.apiBookingReadSpecial, name='APIreadbookingsspecial'),
+    path('new-order/', views.new_order, name='razorpay_neworder'),
+    path('callback/', views.order_callback, name='razorpay_callback'),
 
 
 

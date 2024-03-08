@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     { path: 'viewAPI/:postId', element:<ViewAPI/>},
     { path: 'updateAPI/:postId/edit', element:<UpdateAPI/>},
     { path: 'BookingRead', element:<BookingRead/>},
-    { path: 'bookingDetails', element:<BookingDetails/>},
+    { path: 'bookingDetails/:postId', element:<BookingDetails/>},
 
 ]);
 
