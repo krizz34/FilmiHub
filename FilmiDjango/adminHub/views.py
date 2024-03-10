@@ -345,7 +345,7 @@ def apiBookingReadSpecial(request, pk):
 razorpay_client = razorpay.Client(auth=("rzp_test_50SixNEzkjDT9g", "hl2ieBJVAiwtPwkVG5lSgF6Y"))
 
 @csrf_exempt
-@permission_classes([IsAuthenticated])
+@permission_classes((AllowAny,))
 def new_order(request):
     if request.method == "POST":
 
@@ -376,7 +376,9 @@ def new_order(request):
 @permission_classes((AllowAny,))
 def order_callback(request):
     if request.method == "POST":
+        print('moonji')
         if "razorpay_signature" in request.POST:
+            print('soochi')
             payment_verification = razorpay_client.utility.verify_payment_signature(request.POST)
             if payment_verification:
                 return JsonResponse({"res":"success"})
