@@ -1,26 +1,20 @@
-.customNavItem:hover {
-    transform: translateY(-1px);
+.customNavbar {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color: white;
+}
+
+.navbar .dropdown-menu {
+    z-index: inherit;
 }
 
 .customNavBrand:hover {
     transform: scale(1.05);
 }
 
-.customNavbar {
-    /* font-size: 24px; */
-    max-width: 685px;
-    margin: 0 auto;
-    border-radius: 30px;
-    position: sticky;
-    top: 0;
-    z-index: 9px;
-    background-color: white !important; /* Add this line */
-}
-
-.navbar .dropdown-menu {
-    z-index: inherit; /* You can adjust this value based on your needs */
-  }
-
-  .customNavItem, .customNavItem:hover {
+.customNavItem:hover {
+    transform: translateY(-1px);
     color: #eecd1d !important;
 }

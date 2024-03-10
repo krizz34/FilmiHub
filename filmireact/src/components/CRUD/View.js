@@ -16,7 +16,6 @@ function ViewPost() {
     // var [post,setPost] = useState({title:'',content:''})
     var [post,setPost] = useState({movieName:'',movieDesc:'',movieGenre:'',movieCost:'',movieTime:'',movieFromDate:'',movieEndDate:''})
     const [bookingDate, setBookingDate] = useState('');
-    const [bookingTime, setBookingTime] = useState('');
     const [noOfBookings, setNoOfBookings] = useState('');
     const [seatsAvailable, setSeatsAvailable] = useState(null);
     const [selectedNoOfBookings, setSelectedNoOfBookings] = useState(null);
