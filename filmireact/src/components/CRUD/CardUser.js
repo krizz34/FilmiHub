@@ -93,7 +93,7 @@ function MovieCard(props) {
     return (
         <div className="col">
             <div className="card h-100 shadow-sm">
-                <img src={sampleMovieImage} className="card-img-top" alt="Movie Poster" />
+                <img src={props.post.movieImage} className="card-img" alt="Movie Poster" />
                 <div className="card-body">
                     <div className="clearfix mb-3">
                         <span className="float-start badge rounded-pill bg-success">₹ {props.post.movieCost}</span>
