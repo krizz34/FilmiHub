@@ -22,6 +22,7 @@ function BookingDetails() {
   const [seatNumbers, setSeatNumbers] = useState('');
   const [movieDesc, setMovieDesc] = useState('');
   const [movieId, setMovieId] = useState('');
+  const [movieImage, setMovieImage] = useState('');
   
 
 
@@ -41,6 +42,7 @@ function BookingDetails() {
               setMovieName(response.data.movieName);
               setMovieDesc(response.data.movieDesc);
               setMovieGenre(response.data.movieGenre);
+              setMovieImage(response.data.movieImage);
             })
             .catch(error => {
               console.error('Error fetching movie details:', error);
@@ -62,6 +64,7 @@ function BookingDetails() {
                 <div className="ticket created-by-anniedotexe">
                     <div className="left">
                         <div className="image">
+                        {/* <div className="image" style={{ height:"250px", window: "250px", backgroundImage: `url(${movieImage})`, backgroundSize: "contain", opacity: "0.85" }}>   */}
                             <p className="admit-one">
                                 <span>FILMIHUB</span>
                                 <span>FILMIHUB</span>

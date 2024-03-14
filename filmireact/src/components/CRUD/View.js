@@ -14,7 +14,7 @@ function ViewPost() {
     var {postId} = useParams()
     let navigate = useNavigate();
     // var [post,setPost] = useState({title:'',content:''})
-    var [post,setPost] = useState({movieName:'',movieDesc:'',movieGenre:'',movieCost:'',movieTime:'',movieFromDate:'',movieEndDate:''})
+    var [post,setPost] = useState({movieName:'',movieDesc:'',movieGenre:'',movieImage:'',movieCost:'',movieTime:'',movieFromDate:'',movieEndDate:''})
     const [bookingDate, setBookingDate] = useState('');
     const [noOfBookings, setNoOfBookings] = useState('');
     const [seatsAvailable, setSeatsAvailable] = useState(null);
@@ -169,6 +169,9 @@ function ViewPost() {
             <div className="container w-75 bg-white rounded mt-5 p-3">
                 <h1 className="text-center my-4" style={{ fontWeight: 'bold', color: '#eecd1d' }}>{post.movieName}</h1>
                 <div className="row">
+                    <div className="col-12">
+                        <img src={post.movieImage} className="card-img-top" alt="Movie Poster" />
+                    </div>
                     <div className="col-8 offset-2">
                         <div className="card-body">
                             <p><strong>Genre:</strong> {post.movieGenre}</p>

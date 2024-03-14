@@ -14,6 +14,7 @@ function EditPost() {
     const [movieName, setMovieName] = useState('');
     const [movieDesc, setMovieDesc] = useState('');
     const [movieGenre, setMovieGenre] = useState('');
+    const [movieImage, setMovieImage] = useState('');
     const [movieCost, setMovieCost] = useState('');
     const [movieTime, setMovieTime] = useState('');
     const [movieFromDate, setMovieFromDate] = useState('');
@@ -28,6 +29,7 @@ function EditPost() {
             setMovieName(response.data.movieName);
             setMovieDesc(response.data.movieDesc);
             setMovieGenre(response.data.movieGenre);
+            setMovieImage(response.data.movieImage);
             setMovieCost(response.data.movieCost);
             setMovieTime(response.data.movieTime);
             setMovieFromDate(response.data.movieFromDate);
@@ -40,6 +42,7 @@ function EditPost() {
             movieName: movieName,
             movieDesc: movieDesc,
             movieGenre: movieGenre,
+            movieImage: movieImage,
             movieCost: movieCost,
             movieTime: movieTime,
             movieFromDate: movieFromDate,
@@ -81,6 +84,10 @@ function EditPost() {
                         <div className="form-group">
                             <label>Genre:</label>
                             <input type="text" className="form-control" value={movieGenre} onChange={(event) => { setMovieGenre(event.target.value) }} />
+                        </div>
+                        <div className="form-group">
+                            <label>Poster URL:</label>
+                            <input type="text" className="form-control" value={movieImage} onChange={(event) => { setMovieImage(event.target.value) }} />
                         </div>
                         <div className="form-group">
                             <label>Ticket Price:</label>

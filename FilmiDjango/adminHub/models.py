@@ -8,6 +8,7 @@ class movie(models.Model):
     movieDesc = models.TextField(max_length=1200)
     movieGenre = models.TextField(max_length=200)
     movieCost = models.DecimalField(max_digits=10, decimal_places=2)
+    movieImage = models.URLField(max_length=200, default="https://1.bp.blogspot.com/-ftB4Pd-AMwk/URPtZ026OnI/AAAAAAAAAds/wFJ4C-u2HTY/s1600/swades_xlg.jpg")
     movieTime = models.CharField(max_length=10, choices=[
         ('11:30 am', '11:30 am'),
         ('2:30 pm', '2:30 pm'),

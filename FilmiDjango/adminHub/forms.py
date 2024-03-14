@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class movieForm(forms.ModelForm):
     class Meta:
         model = movie
-        fields = ['movieName', 'movieDesc', 'movieGenre', 'movieCost', 'movieTime', 'movieFromDate', 'movieEndDate']
+        fields = ['movieName', 'movieDesc', 'movieGenre', 'movieCost','movieImage', 'movieTime', 'movieFromDate', 'movieEndDate']
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField()
