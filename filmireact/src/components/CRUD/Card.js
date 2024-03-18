@@ -42,7 +42,7 @@ function MovieCard(props) {
                  <Link to={`/updateAPI/${props.post.id}/edit`} className="btn btn-primary btn-sm m-1 border-0" style={{ backgroundColor: '#000000', color: '#808080' }}>
                      <FontAwesomeIcon icon={faPencilAlt} />
                  </Link>
-                 <Link to={`/viewAPI/${props.post.id}`} className="btn btn-info btn-sm m-1 border-0" style={{ backgroundColor: '#000000', color: '#eecd1d'}}>
+                 <Link to={`/viewAdminAPI/${props.post.id}`} className="btn btn-info btn-sm m-1 border-0" style={{ backgroundColor: '#000000', color: '#eecd1d'}}>
                      <FontAwesomeIcon icon={faEye} />
                  </Link>
                     </div>

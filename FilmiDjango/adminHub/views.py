@@ -52,7 +52,7 @@ def apiSignup(request):
         user = form.save()
         return Response("account created successfully", status=status.HTTP_201_CREATED)
     else:
-        print(form.errors)  # Log or print the form errors for debugging
+        print(form.errors)
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @csrf_exempt
@@ -336,6 +336,33 @@ def apiBookingReadSpecial(request, pk):
     bookingDetails = BookingRegister.objects.get(pk=pk)
     serializer = bookingSerializer(bookingDetails)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def apiShowDetails(request, movie_id, bookingDate):
+    try:
+        booking_details = BookingRegister.objects.filter(movie=movie_id, bookingDate=bookingDate).select_related('user')
+
+        if booking_details.exists():
+            serializer = bookingSerializer(booking_details, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({'message': 'No booking details found for the specified movie, date, and time'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+
+
+
+
+
+
 
 
 

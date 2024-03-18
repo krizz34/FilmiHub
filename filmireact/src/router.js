@@ -11,6 +11,7 @@ import ViewAPI from "./components/CRUD/View";
 import UpdateAPI from "./components/CRUD/Update";
 import BookingRead from "./components/Booking/ReadBooking";
 import BookingDetails from "./components/Booking/bookingDetails";
+import ViewAdminAPI from "./components/CRUD/ViewAdmin";
 
 
 
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
     { path: 'adminRead', element:<AdminListPosts/>},
     { path: 'createAPI', element:<CreateAPI/>},
     { path: 'viewAPI/:postId', element:<ViewAPI/>},
+    { path: 'viewAdminAPI/:postId', element:<ViewAdminAPI/>},
     { path: 'updateAPI/:postId/edit', element:<UpdateAPI/>},
     { path: 'BookingRead', element:<BookingRead/>},
     { path: 'bookingDetails/:postId', element:<BookingDetails/>},
