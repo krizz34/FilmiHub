@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 urlpatterns = [
@@ -19,6 +19,7 @@ urlpatterns = [
     path('new-order/', views.new_order, name='razorpay_neworder'),
     path('callback/', views.order_callback, name='razorpay_callback'),
     path('APIshowDetails/<int:movie_id>/<str:bookingDate>/', views.apiShowDetails, name='apiShowDetails'),
+    path('APIgetTotalBookings/<int:movie_id>/<str:from_date>/<str:end_date>/<str:time>/', views.get_total_bookings, name='get_total_bookings'),
 
 
 

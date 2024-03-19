@@ -55,7 +55,6 @@ function ListPosts() {
       })
       .then(response => {
         setPosts(response.data);
-        // Show all items by default
         setFilteredPosts(response.data);
       })
       .catch(error => {
@@ -93,7 +92,7 @@ function ListPosts() {
 
 
             
-            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-2"> {/* Adjust the number of columns based on your design */}
+            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-2"> 
             {filteredPosts.length === 0 ? (
               <p>No matching medicines found.</p>
             ) : (

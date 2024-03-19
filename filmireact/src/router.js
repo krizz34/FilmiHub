@@ -12,6 +12,7 @@ import UpdateAPI from "./components/CRUD/Update";
 import BookingRead from "./components/Booking/ReadBooking";
 import BookingDetails from "./components/Booking/bookingDetails";
 import ViewAdminAPI from "./components/CRUD/ViewAdmin";
+import ListCollections from "./components/CRUD/CollectionRead";
 
 
 
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
     { path: 'login', element:<Login/>},
     { path: 'readAPI', element:<ReadAPI/>},
     { path: 'adminRead', element:<AdminListPosts/>},
+    { path: 'adminCollections', element:<ListCollections/>},
     { path: 'createAPI', element:<CreateAPI/>},
     { path: 'viewAPI/:postId', element:<ViewAPI/>},
     { path: 'viewAdminAPI/:postId', element:<ViewAdminAPI/>},

@@ -40,7 +40,13 @@
     margin-top: 15px;
     margin-bottom: 15px;
   }
-  
+
+  h5 {
+    font-family: 'Rocher';
+    font-size: 18px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }  
   
   @font-palette-values --Mint {
     font-family: Rocher;

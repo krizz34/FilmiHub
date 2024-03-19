@@ -10,6 +10,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.db.models import Q
 from django.db.models import Sum
+from django.db import models
 
 
 from rest_framework import status
@@ -121,6 +122,23 @@ def apiRead(request):
     admin_movies = movie.objects.filter(Q(movieEndDate__gt=current_date))
     serializer = movieSerializer(admin_movies, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([])
+def get_total_bookings(request, movie_id, from_date, end_date, time):
+    try:
+        total_bookings = BookingRegister.objects.filter(
+            movie_id=movie_id,
+            bookingDate__range=[from_date, end_date],
+            bookingTime=time
+        ).aggregate(total_bookings=models.Sum('noOfBookings'))['total_bookings']
+        if total_bookings is None:
+            total_bookings = 0
+        return JsonResponse({'totalBookings': total_bookings})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

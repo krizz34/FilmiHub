@@ -31,12 +31,17 @@ const Navbar = () => {
     <>
       <li className="nav-item customNavItem">
         <NavLink to={"/readAPI"} className={'nav-link font-weight-bold customNavItem' +(status => status.isActive ? 'active' : '')} style={{ color: '#eecd1d' }} >
-          Movies
+          Running Movies
+        </NavLink>
+      </li>
+      <li className="nav-item customNavItem">
+        <NavLink to={"/adminCollections"} className={'nav-link font-weight-bold customNavItem' +(status => status.isActive ? 'active' : '')} style={{ color: '#eecd1d' }}>
+          Collections
         </NavLink>
       </li>
       <li className="nav-item customNavItem">
         <NavLink to={"/adminRead"} className={'nav-link font-weight-bold customNavItem' +(status => status.isActive ? 'active' : '')} style={{ color: '#eecd1d' }} >
-          Admin Movie List
+          All Movies
         </NavLink>
       </li>
       <li className="nav-item customNavItem">
