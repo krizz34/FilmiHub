@@ -17,6 +17,7 @@ function ViewPost() {
     var [post,setPost] = useState({movieName:'',movieDesc:'',movieGenre:'',movieImage:'',movieCost:'',movieTime:'',movieFromDate:'',movieEndDate:''})
     const [bookingDate, setBookingDate] = useState('');
     const [noOfBookings, setNoOfBookings] = useState('');
+    const [userID, setUserID] = useState('');
     const [seatsAvailable, setSeatsAvailable] = useState(null);
     const [selectedNoOfBookings, setSelectedNoOfBookings] = useState(null);
 
@@ -32,7 +33,9 @@ function ViewPost() {
     },[postId, user]);
 
     function addBookingRecord(){
+        console.log(user);
         axios.post(`http://127.0.0.1:8000/adminHub/APIcreatebooking/${postId}/`, {
+            user_id: user.id,
             bookingDate: bookingDate,
             bookingTime: post.movieTime,
             noOfBookings: noOfBookings,
@@ -45,6 +48,7 @@ function ViewPost() {
             navigate('/BookingRead');
         })
         .catch(error => {
+            console.log(user.id);
             if (error.response) {
                 alert(`Error: ${error.response.data.error}`);
                 console.log(error.response.data.error)
@@ -180,6 +184,7 @@ function ViewPost() {
                             <p><strong>Screening Start Date:</strong> {post.movieFromDate}</p>
                             <p><strong>Screening End Date:</strong> {post.movieEndDate}</p>
                             <p><strong>Ticket Price:</strong> {post.movieCost}</p>
+                            {/* <p><strong>USER id:</strong> {user.id}</p> */}
                         </div>
                         <div className="form-group">
                             <label>Booking Date:</label>

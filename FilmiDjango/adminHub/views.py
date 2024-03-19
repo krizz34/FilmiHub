@@ -72,7 +72,7 @@ def apiLogin(request):
             return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
         else:
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': '{}'.format(token.key)}, status=HTTP_200_OK)
+            return Response({'id': user.id, 'username': user.username, 'token': token.key}, status=HTTP_200_OK)
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -239,106 +239,6 @@ def apiCheckAvailability(request, bookingDate, bookingTime):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def apiCreateBooking(request, movie_id):
-    movie_instance = get_object_or_404(movie, pk=movie_id)
-
-
-
-    seats_available = request.data.get('seatsAvailable', 0)
-    no_of_bookings = int(request.data.get('noOfBookings', 0))
-
-
-
-
-    booking_data = {
-        'user': request.user.id,
-        'movie': movie_instance.id,
-        'bookingDate': request.data.get('bookingDate'),
-        'bookingTime': movie_instance.movieTime,
-        'noOfBookings': request.data.get('noOfBookings'),
-        'seatNumbers': '',
-    }
-
-
-
-
-    seat_numbers = []
-    for i in range(no_of_bookings, 0, -1):
-        seat_number = seats_available - i + 1
-        seat_numbers.append(f'LUXE {seat_number}')
-    booking_data['seatNumbers'] = ', '.join(seat_numbers)
-
-
-
-
-    serializer = bookingSerializer(data=booking_data)
-
-
-
-
-    if serializer.is_valid():
-        booking_instance = serializer.save()
-
-        # Generate QR code after saving the object
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-        )
-        qr_data = f"Booking ID: {booking_instance.id}\nMovie: {movie_instance.movieName}\nDate: {booking_instance.bookingDate}\nTime: {booking_instance.bookingTime}\nSeats: {booking_instance.seatNumbers}"
-        qr.add_data(qr_data)
-        qr.make(fit=True)
-
-        # Create BytesIO object to store QR code image
-        qr_img = BytesIO()
-        img = qr.make_image(fill_color="black", back_color="white")
-        img.save(qr_img)
-        qr_img.seek(0)
-
-        # Update the booking instance with the QR code
-        booking_instance.bookingQR.save(f"booking_{booking_instance.id}.png", File(qr_img))
-
-        # Generate PDF
-        template = get_template('booking_template.html')
-        qr_code_url = booking_instance.bookingQR.url
-        print(qr_code_url)
-        context = {'booking_data': booking_instance, 'movie_instance': movie_instance, 'booking_QR': qr_code_url}
-        html_content = template.render(context)
-
-        # Save PDF in BookingRegister model using ContentFile
-        pdf_content = BytesIO()
-        pisa.CreatePDF(BytesIO(html_content.encode('UTF-8')), dest=pdf_content)
-        booking_instance.bookingPDF.save(f"booking_{booking_instance.id}.pdf", ContentFile(pdf_content.getvalue()))
-        
-
-
-
-
-        subject = 'Booking Confirmation'
-        to_email = request.user.email
-        from_email = 'admin@filmihub.io'
-        email_context = {'booking_data': booking_instance, 'movie_instance': movie_instance}
-        email_body_html = render_to_string('booking_email_template.html', email_context)
-        email_body_text = strip_tags(email_body_html)
-
-        email = EmailMessage(
-            subject,
-            email_body_text,
-            from_email,
-            [to_email],
-        )
-        pdf_file_path = booking_instance.bookingPDF.path
-        email.attach_file(pdf_file_path, 'application/pdf')
-
-        email.send()
-
-        return Response({'message': 'Booking record created successfully'}, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -431,3 +331,118 @@ def order_callback(request):
             else:
                 return JsonResponse({"res":"failed"})
                 # Logic to perform is payment is unsuccessful
+
+
+
+#debug create
+            
+
+
+
+
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def apiCreateBooking(request, movie_id):
+    movie_instance = get_object_or_404(movie, pk=movie_id)
+
+
+
+    seats_available = request.data.get('seatsAvailable', 0)
+    no_of_bookings = int(request.data.get('noOfBookings', 0))
+
+
+
+
+    booking_data = {
+        'user': request.data.get('user_id'),
+        'movie': movie_instance.id,
+        'bookingDate': request.data.get('bookingDate'),
+        'bookingTime': movie_instance.movieTime,
+        'noOfBookings': request.data.get('noOfBookings'),
+        'seatNumbers': '',
+    }
+    print('this is user ID: {}'. format(request.data.get('user_id')))
+    print('this is user ID: {}'. format(booking_data))
+
+
+
+
+    seat_numbers = []
+    for i in range(no_of_bookings, 0, -1):
+        seat_number = seats_available - i + 1
+        seat_numbers.append(f'LUXE {seat_number}')
+    booking_data['seatNumbers'] = ', '.join(seat_numbers)
+
+
+
+
+    serializer = bookingSerializer(data=booking_data)
+
+
+
+
+    if serializer.is_valid():
+        booking_instance = serializer.save()
+
+        # Generate QR code after saving the object
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr_data = f"Booking ID: {booking_instance.id}\nMovie: {movie_instance.movieName}\nDate: {booking_instance.bookingDate}\nTime: {booking_instance.bookingTime}\nSeats: {booking_instance.seatNumbers}"
+        qr.add_data(qr_data)
+        qr.make(fit=True)
+
+        # Create BytesIO object to store QR code image
+        qr_img = BytesIO()
+        img = qr.make_image(fill_color="black", back_color="white")
+        img.save(qr_img)
+        qr_img.seek(0)
+
+        # Update the booking instance with the QR code
+        booking_instance.bookingQR.save(f"booking_{booking_instance.id}.png", File(qr_img))
+
+        #PDF
+        template = get_template('booking_template.html')
+        qr_code_url = booking_instance.bookingQR.url
+        print(qr_code_url)
+        context = {'booking_data': booking_instance, 'movie_instance': movie_instance, 'booking_QR': qr_code_url}
+        html_content = template.render(context)
+
+        pdf_content = BytesIO()
+        pisa.CreatePDF(BytesIO(html_content.encode('UTF-8')), dest=pdf_content)
+
+        # Save PDF in BookingRegister model using ContentFile
+        booking_instance.bookingPDF.save(f"booking_{booking_instance.id}.pdf", ContentFile(pdf_content.getvalue()))
+        
+
+
+
+
+        subject = 'Booking Confirmation'
+        to_email = request.user.email
+        from_email = 'admin@filmihub.io'
+        email_context = {'booking_data': booking_instance, 'movie_instance': movie_instance}
+        email_body_html = render_to_string('booking_email_template.html', email_context)
+        email_body_text = strip_tags(email_body_html)
+
+        email = EmailMessage(
+            subject,
+            email_body_text,
+            from_email,
+            [to_email],
+        )
+        pdf_file_path = booking_instance.bookingPDF.path
+        email.attach_file(pdf_file_path, 'application/pdf')
+
+        email.send()
+
+        return Response({'message': 'Booking record created successfully'}, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

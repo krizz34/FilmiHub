@@ -9,8 +9,9 @@ class movieSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class bookingSerializer(serializers.ModelSerializer):
+
     username = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = BookingRegister
-        fields = ['id', 'bookingDate', 'bookingTime', 'noOfBookings', 'seatNumbers', 'bookingQR', 'bookingPDF', 'username']
+        fields = ['id', 'bookingDate', 'bookingTime', 'noOfBookings', 'seatNumbers','user','movie', 'bookingQR', 'bookingPDF','username']
